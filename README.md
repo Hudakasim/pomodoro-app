@@ -1,6 +1,12 @@
 # Pomodoro Timer App
 
-Bu uygulama, Pomodoro tekniği ile zaman yönetimini destekleyen bir uygulamadır. Kullanıcılar, belirli bir süre çalışarak odaklanabilir ve ardından kısa bir ara (rest) vererek verimliliklerini artırabilirler. Bu proje, Flutter ile geliştirilmiştir ve temel özelliklere sahip bir Pomodoro zamanlayıcısı sunmaktadır.
+## Proje Hakkında
+
+Pomodoro Tekniği, zaman yönetimini iyileştirmeye yönelik bir yöntemdir. Bu uygulama, kullanıcıların **odaklanma sürelerini** ve **dinlenme sürelerini** düzenleyerek bu tekniği daha verimli bir şekilde kullanmalarına olanak tanır. Uygulama, kullanıcı dostu bir arayüz ve etkileşimli özelliklerle geliştirilmiştir.
+
+## Proje Amacı
+
+Bu projenin amacı, kullanıcıların **Pomodoro Tekniği** ile odaklanma sürelerini optimize etmelerine yardımcı olmak, ayrıca dinlenme sürelerini verimli bir şekilde yönetmelerine olanak tanımaktır. Uygulama, **odaklanma** ve **dinlenme sürelerini** kişiselleştirerek kullanıcının verimliliğini artırmayı hedefler.
 
 ---
 
@@ -39,12 +45,21 @@ Uygulama, **Cloudinary**'den alınan bir logo görselini kullanmaktadır. Bu log
 
 ##  Login Bilgilerini Nasıl Sakladığınız
 
-Bu projede, login bilgilerini saklamak için herhangi bir veri saklama yöntemi kullanılmamıştır. Ancak, ilerleyen versiyonlarda kullanıcının giriş bilgilerini saklamak için **`SharedPreferences`** veya bir **backend** servisi ile saklama yöntemleri kullanılabilir.
-
-**Not**: Şu anki sürümde kullanıcı sadece ayarları (focus time ve rest time) kaydedebilmektedir, ancak login bilgileri için herhangi bir saklama işlemi yapılmamıştır.
+Bu projede, login bilgilerini saklamak için **`SharedPreferences`** yöntemini kullanılmamıştır.
 
 ---
 
 ##  Grup Üyelerinin Projeye Katkısı
 
 - **Huda**: Proje fikri, **UI tasarımı**, ve **Tum Proje Sayfalari**'in geliştirilmesi.
+
+### **Teknik Detaylar**:
+- **Dart ve Flutter** kullanılarak geliştirilmiştir.
+- **Global Değişkenler**: Kullanıcı adı gibi veriler, global değişkenler ile saklanır ve sayfalar arasında paylaşılır.
+- **State Management**: Basit state management yaklaşımıyla sayfalar arasında veri paylaşımı sağlanır. Kullanıcı adı ve ayar bilgileri global değişkenlerde saklanır.
+- **Timer İşlevi**: Hem Focus hem de Rest sayfalarında geri sayım işlevi bulunmaktadır. Bu sayede kullanıcılar odaklanma ve dinlenme sürelerini kontrol edebilir.
+- **Drawer Menü**: Uygulama genelinde navigasyonu sağlamak için bir **Drawer** menüsü kullanılır.
+
+### **Öne Çıkan Özellikler**:
+- **Basit Arayüz**: Kullanıcılar, odaklanma ve dinlenme sürelerini kişiselleştirebilecekleri kullanım dostu bir arayüze sahip.
+- **Kullanıcı Girişi ve Saklama**: Kullanıcı adı **global değişkenler** kullanılarak saklanır ve uygulamanın her yerinde kullanılabilir.
