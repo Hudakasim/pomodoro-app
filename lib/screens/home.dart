@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro/screens/rest.dart';
-import 'package:pomodoro/screens/focus.dart';
+import 'rest.dart';
+import 'focus.dart';
 import 'package:pomodoro/screens/assets_screens/custom_drawer.dart';
 
 class Home extends StatefulWidget {
@@ -11,10 +11,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _pages = [
-    Focus_Study(),
-    Rest(),
-  ];
+	int focusTime = 25;
+	int restTime = 5;
+
+  List<Widget> _pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Burada _pages listesine focusTime parametresi ile Focus_Study ekranını ekliyoruz.
+    _pages = [
+      Focus_Study(), // focusTime'ı buraya iletiyoruz
+      Rest(),
+    ];
+	super.initState();
+    _fetchLogo(); // Logo'yu çekiyoruz
+  }
 
   int _selectedIndex = 0;
 
@@ -26,14 +38,8 @@ class _HomeState extends State<Home> {
   }
 
   String? logoUrl;
-  int focusTime = 25;
-  int restTime = 5;
 
   @override
-  void initState() {
-    super.initState();
-    _fetchLogo(); // Logo'yu çekiyoruz
-  }
 
   // Logo URL'sini çekmek için API isteği
   Future<void> _fetchLogo() async {
