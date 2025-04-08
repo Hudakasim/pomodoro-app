@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomDrawer extends StatelessWidget {
   final String? logoUrl; // Logo URL'sini alacağız
 
-  CustomDrawer({this.logoUrl}); // Logo URL'sini constructor ile alıyoruz
+  const CustomDrawer({super.key, this.logoUrl}); // Logo URL'sini constructor ile alıyoruz
 
   @override
   Widget build(BuildContext context) {
