@@ -27,9 +27,11 @@ class _RestState extends State<Rest> {
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (secondsLeft > 0) {
-        setState(() {
-          secondsLeft--;  // Zamanı bir saniye azaltıyoruz
-        });
+        if (mounted){
+          setState(() {
+            secondsLeft--;  // Zamanı bir saniye azaltıyoruz
+          });
+        }
       } else {
         _timer.cancel();  // Timer bitince durduruluyor
         setState(() {

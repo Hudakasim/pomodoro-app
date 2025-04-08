@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/screens/assets_screens/custom_drawer.dart';
 import 'package:pomodoro/screens/home.dart';
-import 'focus.dart';  // Focus_Study ekranını dahil edelim.
 import 'global.dart'; // Global değişkenleri import ediyoruz
 
 class Settings extends StatefulWidget {
