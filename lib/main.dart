@@ -1,28 +1,36 @@
-import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:flutter/material.dart';
-import 'package:pomodoro/screens/home.dart';
-import 'package:pomodoro/screens/login.dart';
-import 'package:pomodoro/screens/settings.dart';
-
-var cloudinary = Cloudinary.fromStringUrl('cloudinary://API_KEY:API_SECRET@CLOUD_NAME');
+import 'screens/settings.dart';
+import 'screens/home.dart';
 
 void main() {
-  runApp(Pomodoro());
+    runApp(const Pomodoro());
 }
 
 class Pomodoro extends StatelessWidget {
-  const Pomodoro({super.key});
+    const Pomodoro({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Login(),  // İlk açılışta Login sayfası görünecek
-        routes: {
-          '/login': (context) => Login(),
-          '/home': (context) => Home(),
-          '/settings': (context) => Settings(),
-        },
-    );
-  }
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+            title: 'Drawer Demo',
+            theme: ThemeData(
+                primarySwatch: Colors.blue,
+            ),
+            initialRoute: '/',
+            routes: {
+                '/': (context) => const Home(),
+                '/settings': (context) => const Settings(),
+            },
+        );
+    }
 }
+
+// class HomePage extends StatelessWidget {
+//     const HomePage({super.key});
+
+//     @override
+//     Widget build(BuildContext context) {
+//         return const BasePage(title: 'Ana Sayfa', content: 'Ana Sayfa');
+//     }
+// }
+
