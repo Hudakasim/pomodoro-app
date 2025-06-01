@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: GestureDetector(
                         onTap: () => Navigator.pushNamed(context, '/settings'),
                         child: Image.asset(
-                            'assets/logo.png',
+                            'assets/logo/logo_white.png',
                             height: 30,
                         ),
                     ),

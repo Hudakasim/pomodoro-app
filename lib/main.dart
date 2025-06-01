@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/settings.dart';
-import 'screens/home.dart';
+import 'screens/home_page/home.dart';
 
 void main() {
     runApp(const Pomodoro());

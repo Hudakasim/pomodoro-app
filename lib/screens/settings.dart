@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro/screens/home.dart';
+import 'package:pomodoro/screens/home_page/home.dart';
 import 'package:pomodoro/widgets/base.dart';
-import 'global.dart';
+import 'home_page/global.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
