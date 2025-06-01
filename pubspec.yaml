@@ -21,6 +21,9 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.8.0 <4.0.0"
 
+dependency_overrides:
+  sign_in_with_apple: ^6.0.0
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -28,13 +31,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cloudinary_url_gen: ^1.0.0
-  cloudinary_api: ^1.0.0
   flutter:
     sdk: flutter
   http: ^1.3.0
   provider: ^6.1.3
   shared_preferences: ^2.0.15
+  supabase_flutter: ^1.10.21
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.15.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
