@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/screens/home_page/home.dart';
 import 'package:pomodoro/widgets/base.dart';
-import 'home_page/global.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -17,8 +16,8 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    _focusTimeController.text = '$focusTime';
-    _restTimeController.text = '$restTime';
+    _focusTimeController.text = '25';
+    _restTimeController.text = '5';
   }
 
 
@@ -46,9 +45,7 @@ class _SettingsState extends State<Settings> {
             TextField(
               keyboardType: TextInputType.number,
               onChanged: (value) {
-                setState(() {
-                  focusTime = int.tryParse(value) ?? 25;
-                });
+                setState(() {                });
               },
               decoration: InputDecoration(
                 hintText: 'Enter Focus Time',
@@ -68,7 +65,6 @@ class _SettingsState extends State<Settings> {
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 setState(() {
-                  restTime = int.tryParse(value) ?? 5;
                 });
               },
               decoration: InputDecoration(
@@ -88,13 +84,17 @@ class _SettingsState extends State<Settings> {
                 padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
               ),
               onPressed: () {
+                final focus = int.tryParse(_focusTimeController.text) ?? 25;
+                final rest = int.tryParse(_restTimeController.text) ?? 5;
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Home(),
+                    builder: (context) => Home(focusDuration: focus, restDuration: rest),
                   ),
                 );
               },
+
               child: Text(
                 "Start Focus Session",
                 style: TextStyle(fontSize: 16, color: Colors.white)

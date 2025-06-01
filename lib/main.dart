@@ -18,7 +18,7 @@ class Pomodoro extends StatelessWidget {
             ),
             initialRoute: '/',
             routes: {
-                '/': (context) => const Home(),
+                '/': (context) => const Home(focusDuration: 25, restDuration: 5),
                 '/settings': (context) => const Settings(),
             },
         );

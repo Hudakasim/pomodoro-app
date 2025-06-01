@@ -4,27 +4,34 @@ import 'rest.dart';
 import 'focus.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final int focusDuration;
+  final int restDuration;
+
+  const Home({super.key, required this.focusDuration, required this.restDuration});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
+
 class _HomeState extends State<Home> {
-  int focusTime = 25;
-  int restTime = 5;
+  late final int focusTime;
+  late final int restTime;
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    Focus_Study(),
-    Rest(),
-  ];
-
+  late final List<Widget> _pages;
+  
   @override
   void initState() {
     super.initState();
-  }
+    focusTime = widget.focusDuration;
+    restTime = widget.restDuration;
 
+    _pages = [
+      Focus_Study(focusTime: focusTime),
+      Rest(restTime: restTime),
+    ];
+  }
   void _navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;

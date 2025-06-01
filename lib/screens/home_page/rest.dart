@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'global.dart';
 
 class Rest extends StatefulWidget {
-  const Rest({super.key});
-
+  final int restTime;
+  const Rest({super.key, required this.restTime});
   @override
   State<Rest> createState() => _RestState();
 }
@@ -17,7 +16,7 @@ class _RestState extends State<Rest> {
   @override
   void initState() {
     super.initState();
-    secondsLeft = restTime * 60;
+    secondsLeft = widget.restTime * 60;
   }
 
   void startTimer() {
@@ -65,7 +64,7 @@ class _RestState extends State<Rest> {
                       height: 200,
                       width: 200,
                       child: CircularProgressIndicator(
-                        value: 1 - (secondsLeft / (restTime * 60)),
+                        value: 1 - (secondsLeft / (widget.restTime * 60)),
                         strokeWidth: 12,
                         backgroundColor: Colors.pink.shade100,
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.grey.shade400),
@@ -104,7 +103,7 @@ class _RestState extends State<Rest> {
                         _timer.cancel();
                         setState(() {
                           isTimerRunning = false;
-                          secondsLeft = restTime * 60;
+                          secondsLeft = widget.restTime * 60;
                         });
                       },
                     ),

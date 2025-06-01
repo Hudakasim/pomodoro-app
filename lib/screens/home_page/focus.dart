@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'global.dart';
 
 class Focus_Study extends StatefulWidget {
-  const Focus_Study({super.key});
+  final int focusTime;
+  const Focus_Study({super.key, required this.focusTime});
 
   @override
   State<Focus_Study> createState() => _Focus_StudyState();
@@ -17,7 +17,7 @@ class _Focus_StudyState extends State<Focus_Study> {
   @override
   void initState() {
     super.initState();
-    secondsLeft = focusTime * 60;
+    secondsLeft = widget.focusTime * 60;
   }
 
   void startTimer() {
@@ -65,7 +65,7 @@ class _Focus_StudyState extends State<Focus_Study> {
                       height: 200,
                       width: 200,
                       child: CircularProgressIndicator(
-                        value: 1 - (secondsLeft / (focusTime * 60)),
+                        value: 1 - (secondsLeft / (widget.focusTime * 60)),
                         strokeWidth: 12,
                         backgroundColor: Colors.pink.shade100,
                         valueColor:  AlwaysStoppedAnimation<Color>(Colors.grey.shade400),
@@ -104,7 +104,7 @@ class _Focus_StudyState extends State<Focus_Study> {
                         _timer.cancel();
                         setState(() {
                           isTimerRunning = false;
-                          secondsLeft = focusTime * 60;
+                          secondsLeft = widget.focusTime * 60;
                         });
                       },
                     ),
