@@ -12,7 +12,20 @@
           "package_name": "com.example.pomodoro"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "662510758605-2ev0tuqjenccj0pnd5olbf1su4b8qkln.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pomodoro",
+            "certificate_hash": "787f12027e8e46434ce29adde0a73a316848a18d"
+          }
+        },
+        {
+          "client_id": "662510758605-7vot8fuls6lb063i4hpejk2m0odcivnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB7zud7l_vSBBe9tvn3w3iMUZhdza2TmSM"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662510758605-7vot8fuls6lb063i4hpejk2m0odcivnj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "662510758605-n96u240p1547eo2k1mdiibj6demn1001.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pomodoro"
+              }
+            }
+          ]
         }
       }
     }
