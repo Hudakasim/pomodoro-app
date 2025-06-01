@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/settings.dart';
 import 'screens/home_page/home.dart';
+import 'screens/sign_in_page/login.dart';
+import 'screens/sign_in_page/register.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,13 +21,15 @@ class Pomodoro extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
         return MaterialApp(
-            title: 'Drawer Demo',
+            title: 'Pomodoro App',
             theme: ThemeData(
                 primarySwatch: Colors.blue,
             ),
             initialRoute: '/',
             routes: {
-                '/': (context) => const Home(focusDuration: 25, restDuration: 5),
+                '/': (context) => const Login(),
+                '/register': (context) => RegisterPage(),
+                '/home': (context) => const Home(focusDuration: 25, restDuration: 5),
                 '/settings': (context) => const Settings(),
             },
         );
