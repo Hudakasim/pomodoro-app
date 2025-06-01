@@ -58,27 +58,57 @@ class _Focus_StudyState extends State<Focus_Study> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Focus Time:\n${formatTime(secondsLeft)}',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black, // White text for better visibility
-                  ),
-                  textAlign: TextAlign.center,
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: CircularProgressIndicator(
+                        value: 1 - (secondsLeft / (focusTime * 60)),
+                        strokeWidth: 12,
+                        backgroundColor: Colors.pink.shade100,
+                        valueColor:  AlwaysStoppedAnimation<Color>(Colors.grey.shade400),
+                      ),
+                    ),
+                    Text(
+                      formatTime(secondsLeft),
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color:  Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: isTimerRunning ? stopTimer : startTimer,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFC31F48),
-                    side: const BorderSide(width: 1, color: Colors.grey),
-                    padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                  ),
-                  child: Text(
-                    isTimerRunning ? 'Stop' : 'Start',
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        isTimerRunning ? Icons.pause : Icons.play_arrow,
+                        size: 32,
+                      ),
+                      onPressed: () {
+                        if (isTimerRunning) {
+                          stopTimer();
+                        } else {
+                          startTimer();
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.stop, size: 32),
+                      onPressed: () {
+                        _timer.cancel();
+                        setState(() {
+                          isTimerRunning = false;
+                          secondsLeft = focusTime * 60;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
