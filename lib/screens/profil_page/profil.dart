@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pomodoro/widgets/base.dart';
 import '../../services/user_service.dart';
 import '../../services/local_storage_service.dart';
+import '../../services/database_helper.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -18,6 +19,8 @@ class _ProfileState extends State<Profile> {
   final UserService _userService = UserService();
   final LocalStorageService _storage = LocalStorageService();
 
+  final TextEditingController _usernameController = TextEditingController();
+
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
@@ -28,7 +31,7 @@ class _ProfileState extends State<Profile> {
 
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
-
+  final DatabaseHelper _dbHelper = DatabaseHelper();
   bool _isLoading = true;
 
   @override
@@ -42,11 +45,18 @@ class _ProfileState extends State<Profile> {
     final userId = user!.uid;
 
     final localUserData = await _storage.getUserData(userId);
-    print("Local user data: $localUserData"); // Debug
-
+    final sqliteData = await _dbHelper.getUserProfile(userId);
     final firestoreData = await _userService.getUserData();
 
     setState(() {
+      if (sqliteData != null) {
+      _usernameController.text = sqliteData['username'] ?? '';
+      _bioController.text = sqliteData['bio'] ?? '';
+      final imagePath = sqliteData['profile_image'];
+    if (imagePath != null && imagePath.isNotEmpty) {
+      _selectedImage = File(imagePath);
+    }
+    }
       _nameController.text = localUserData['name'] ?? '';
       _surnameController.text = localUserData['surname'] ?? '';
       _emailController.text = localUserData['email'] ?? '';
@@ -72,7 +82,28 @@ class _ProfileState extends State<Profile> {
     final userId = user!.uid;
 
     setState(() => _isLoading = true);
-
+    // SQLite'e kaydetme
+    try {
+      final existingProfile = await _dbHelper.getUserProfile(userId);
+        if (existingProfile == null) {
+          await _dbHelper.insertUserProfile({
+            'user_id': userId,  // kullanıcı id ekle
+            'username': _usernameController.text.trim(),
+            'bio': _bioController.text.trim(),
+            'profile_image': _selectedImage?.path ?? '',
+          });
+        } else {
+          await _dbHelper.updateUserProfile({
+            'id': existingProfile['id'],
+            'user_id': userId, // kullanıcı id ekle
+            'username': _usernameController.text.trim(),
+            'bio': _bioController.text.trim(),
+            'profile_image': _selectedImage?.path ?? existingProfile['profile_image'],
+          });
+      }
+    } catch (e) {
+      print("SQLite kaydetme hatası: $e");
+    }
     try {
       // Firestore bilgilerini güncelle
       await _userService.updateUserProfile(
@@ -209,7 +240,11 @@ class _ProfileState extends State<Profile> {
             ),
 
             const SizedBox(height: 30),
-
+            TextField(
+              controller: _usernameController,
+              decoration: const InputDecoration(labelText: 'Username for profile'),
+            ),
+            const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
