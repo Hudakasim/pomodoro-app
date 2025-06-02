@@ -19,16 +19,28 @@ Future<void> signInWithGoogle(BuildContext context) async {
 
     final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
-    // SharedPreferences'a kayıt
     final storage = LocalStorageService();
+    final localUserData = await storage.getUserData();
+
+    String nameToSave;
+    if (localUserData['name'] == null || localUserData['name']!.isEmpty) {
+      // Local'da isim yoksa Google'dan çek
+      nameToSave = userCredential.user!.displayName ?? '';
+    } else {
+      // Local'da isim varsa onu kullan
+      nameToSave = localUserData['name']!;
+    }
+
     await storage.saveUserData(
       userId: userCredential.user!.uid,
       email: userCredential.user!.email ?? '',
-      name: userCredential.user!.displayName ?? '',
-      surname: '',
+      name: nameToSave,
+      surname: localUserData['surname'] ?? '',
     );
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('welcome_shown', false);
+
     Navigator.pushNamed(context, '/home');
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Google ile giriş başarısız: $e")));

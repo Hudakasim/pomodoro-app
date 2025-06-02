@@ -24,11 +24,16 @@ class LocalStorageService {
     };
   }
 
-  Future<void> clearUserData() async {
+  // Kullanıcı adını güncellemek için ayrı fonksiyon
+  Future<void> updateName(String name) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('userId');
-    await prefs.remove('email');
-    await prefs.remove('name');
-    await prefs.remove('surname');
+    await prefs.setString('name', name);
+  }
+
+  // Soyadını güncellemek için ayrı fonksiyon
+  Future<void> updateSurname(String surname) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('surname', surname);
   }
 }
+

@@ -39,6 +39,7 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _loadAllUserData() async {
     final localUserData = await _storage.getUserData();
+    print("Local user data: $localUserData"); // Debug için ekle
     final firestoreData = await _userService.getUserData();
 
     setState(() {
@@ -77,13 +78,15 @@ class _ProfileState extends State<Profile> {
         _cityController.text,
       );
 
-      // SharedPreferences bilgilerini güncelle
-      await _storage.saveUserData(
-        userId: currentUser.uid,
-        email: _emailController.text.trim(),
-        name: _nameController.text.trim(),
-        surname: _surnameController.text.trim(),
-      );
+      // SharedPreferences bilgilerini modüler olarak güncelle
+      try {
+        await _storage.updateName(_nameController.text.trim());
+        await _storage.updateSurname(_surnameController.text.trim());
+
+        print("SharedPreferences güncellendi: isim=${_nameController.text.trim()}, soyisim=${_surnameController.text.trim()}");
+      } catch (e) {
+        print("SharedPreferences güncelleme hatası: $e");
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profil başarıyla güncellendi!')),
@@ -96,6 +99,7 @@ class _ProfileState extends State<Profile> {
       setState(() => _isLoading = false);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
