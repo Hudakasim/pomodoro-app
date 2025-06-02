@@ -20,8 +20,8 @@ class _ProfileState extends State<Profile> {
 
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _surnameController = TextEditingController();  // Eklendi
-  final TextEditingController _emailController = TextEditingController();    // Eklendi
+  final TextEditingController _surnameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _birthPlaceController = TextEditingController();
@@ -38,8 +38,12 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _loadAllUserData() async {
-    final localUserData = await _storage.getUserData();
-    print("Local user data: $localUserData"); // Debug için ekle
+    if (user == null) return;
+    final userId = user!.uid;
+
+    final localUserData = await _storage.getUserData(userId);
+    print("Local user data: $localUserData"); // Debug
+
     final firestoreData = await _userService.getUserData();
 
     setState(() {
@@ -53,7 +57,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -65,12 +68,12 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _updateProfile() async {
+    if (user == null) return;
+    final userId = user!.uid;
+
     setState(() => _isLoading = true);
 
     try {
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser == null) throw Exception("Kullanıcı bulunamadı");
-
       // Firestore bilgilerini güncelle
       await _userService.updateUserProfile(
         _birthDateController.text,
@@ -80,26 +83,28 @@ class _ProfileState extends State<Profile> {
 
       // SharedPreferences bilgilerini modüler olarak güncelle
       try {
-        await _storage.updateName(_nameController.text.trim());
-        await _storage.updateSurname(_surnameController.text.trim());
+        await _storage.updateName(userId, _nameController.text.trim());
+        await _storage.updateSurname(userId, _surnameController.text.trim());
 
         print("SharedPreferences güncellendi: isim=${_nameController.text.trim()}, soyisim=${_surnameController.text.trim()}");
       } catch (e) {
         print("SharedPreferences güncelleme hatası: $e");
       }
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profil başarıyla güncellendi!')),
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Profil güncellenirken hata: $e')),
       );
     } finally {
+      if (!mounted) return;
       setState(() => _isLoading = false);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +121,7 @@ class _ProfileState extends State<Profile> {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
+
     return BasePage(
       title: 'Profile',
       content: SingleChildScrollView(
@@ -134,7 +140,6 @@ class _ProfileState extends State<Profile> {
             ),
             const SizedBox(height: 20),
 
-            // İsim ve Soyisim yan yana
             Row(
               children: [
                 Expanded(
@@ -155,7 +160,6 @@ class _ProfileState extends State<Profile> {
 
             const SizedBox(height: 16),
 
-            // Email
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
@@ -164,12 +168,10 @@ class _ProfileState extends State<Profile> {
 
             const SizedBox(height: 16),
 
-            // Çizgi
             const Divider(thickness: 1),
 
             const SizedBox(height: 16),
 
-            // Doğum Tarihi ve Doğum Yeri yan yana
             Row(
               children: [
                 Expanded(
@@ -190,7 +192,6 @@ class _ProfileState extends State<Profile> {
 
             const SizedBox(height: 16),
 
-            // Yaşadığı Şehir
             TextField(
               controller: _cityController,
               decoration: const InputDecoration(labelText: 'Şehir'),
@@ -198,7 +199,6 @@ class _ProfileState extends State<Profile> {
 
             const SizedBox(height: 16),
 
-            // Biyografi
             TextField(
               controller: _bioController,
               maxLines: 3,
@@ -228,6 +228,5 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
-
   }
 }

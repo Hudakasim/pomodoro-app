@@ -4,6 +4,7 @@ import 'rest.dart';
 import 'focus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/local_storage_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   final int focusDuration;
@@ -14,7 +15,6 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-
 
 class _HomeState extends State<Home> {
   late final int focusTime;
@@ -41,13 +41,20 @@ class _HomeState extends State<Home> {
   Future<void> _checkWelcome() async {
     final prefs = await SharedPreferences.getInstance();
     bool? shown = prefs.getBool('welcome_shown');
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    final userId = user.uid;
+
     if (shown == null || shown == false) {
       final storage = LocalStorageService();
-      final userData = await storage.getUserData();
+      final userData = await storage.getUserData(userId);
+
       setState(() {
         _showWelcome = true;
         _userName = userData['name'] ?? 'Kullanıcı';
       });
+
       await prefs.setBool('welcome_shown', true);
     }
   }

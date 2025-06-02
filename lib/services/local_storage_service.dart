@@ -10,30 +10,29 @@ class LocalStorageService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userId', userId);
     await prefs.setString('email', email);
-    await prefs.setString('name', name);
-    await prefs.setString('surname', surname);
+    await prefs.setString('name_$userId', name);
+    await prefs.setString('surname_$userId', surname);
   }
 
-  Future<Map<String, String?>> getUserData() async {
+  Future<Map<String, String?>> getUserData(String userId) async {
     final prefs = await SharedPreferences.getInstance();
     return {
       'userId': prefs.getString('userId'),
       'email': prefs.getString('email'),
-      'name': prefs.getString('name'),
-      'surname': prefs.getString('surname'),
+      'name': prefs.getString('name_$userId'),
+      'surname': prefs.getString('surname_$userId'),
     };
   }
 
-  // Kullanıcı adını güncellemek için ayrı fonksiyon
-  Future<void> updateName(String name) async {
+  Future<void> updateName(String userId, String name) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', name);
+    await prefs.setString('name_$userId', name);
   }
 
-  // Soyadını güncellemek için ayrı fonksiyon
-  Future<void> updateSurname(String surname) async {
+  Future<void> updateSurname(String userId, String surname) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('surname', surname);
+    await prefs.setString('surname_$userId', surname);
   }
 }
+
 

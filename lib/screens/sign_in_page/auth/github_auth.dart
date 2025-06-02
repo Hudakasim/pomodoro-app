@@ -11,19 +11,22 @@ Future<void> signInWithGitHub(BuildContext context) async {
     final userCredential = await FirebaseAuth.instance.signInWithProvider(githubProvider);
 
     final storage = LocalStorageService();
-    final localUserData = await storage.getUserData();
+    final userId = userCredential.user!.uid;
+
+    // userId bazlı local veriyi al
+    final localUserData = await storage.getUserData(userId);
 
     String nameToSave;
     if (localUserData['name'] == null || localUserData['name']!.isEmpty) {
-      // Local'da isim yoksa GitHub'dan çek
+      // Local'da kullanıcıya özel isim yoksa GitHub'dan al
       nameToSave = userCredential.user!.displayName ?? '';
     } else {
-      // Local'da isim varsa onu kullan
+      // Varsa localdeki ismi kullan
       nameToSave = localUserData['name']!;
     }
 
     await storage.saveUserData(
-      userId: userCredential.user!.uid,
+      userId: userId,
       email: userCredential.user!.email ?? '',
       name: nameToSave,
       surname: localUserData['surname'] ?? '',
@@ -37,3 +40,4 @@ Future<void> signInWithGitHub(BuildContext context) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("GitHub ile giriş başarısız: $e")));
   }
 }
+
