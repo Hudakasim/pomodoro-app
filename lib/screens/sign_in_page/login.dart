@@ -5,6 +5,7 @@ import 'register.dart';
 import 'auth/google_auth.dart';
 import 'auth/github_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/user_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,6 +17,51 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final UserService _userService = UserService();
+  final LocalStorageService _localStorage = LocalStorageService();
+
+  bool _isLoading = false;
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _usernameController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Kullanıcı bilgilerini SharedPreferences'e kaydet
+      await _localStorage.saveUserData(
+        userId: userCredential.user!.uid,
+        email: userCredential.user!.email ?? '',
+        name: userCredential.user!.displayName ?? userCredential.user!.email!.split('@')[0],
+        surname: '',
+      );
+
+      // Firestore'a kullanıcı bilgisi kaydet (varsa güncelle)
+      await _userService.updateUserProfile(
+        '', // Doğum tarihi (boş bırakıldı)
+        '', // Doğum yeri (boş bırakıldı)
+        '', // Şehir (boş bırakıldı)
+      );
+
+      // Hoşgeldin mesajı için flag sıfırlama
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('welcome_shown', false);
+
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Sign-in error: ${e.toString()}")),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +75,13 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/logo/logo.png', height: 100),
-            const Text("Welcome to MindTick!",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const Text(
+              "Welcome to MindTick!",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 50),
 
-            // Email
+            // Email TextField
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(
@@ -47,11 +95,12 @@ class _LoginState extends State<Login> {
                 hintText: "Enter Your Email",
                 hintStyle: const TextStyle(fontSize: 13),
               ),
+              keyboardType: TextInputType.emailAddress,
             ),
 
             const SizedBox(height: 20),
 
-            // Password
+            // Password TextField
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
@@ -70,45 +119,22 @@ class _LoginState extends State<Login> {
 
             const SizedBox(height: 50),
 
-            // Login button
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFC31F48),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-              ),
-            onPressed: () async {
-              try {
-                final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: _usernameController.text.trim(),
-                  password: _passwordController.text.trim(),
-                );
-
-                // Kullanıcı başarıyla giriş yaptıktan sonra bilgileri kaydet
-                final storage = LocalStorageService();
-                await storage.saveUserData(
-                  userId: userCredential.user!.uid,
-                  email: userCredential.user!.email ?? '',
-                  name: userCredential.user!.displayName ?? '',
-                  surname: '',
-                );
-
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('welcome_shown', false);
-
-                Navigator.pushReplacementNamed(context, '/home');
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Sign-in error: ${e.toString()}")),
-                );
-              }
-            },
-              child: const Text("Login", style: TextStyle(fontSize: 16, color: Colors.white)),
-            ),
+            // Login Button
+            _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFC31F48),
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+                    onPressed: _login,
+                    child: const Text("Login", style: TextStyle(fontSize: 16, color: Colors.white)),
+                  ),
 
             const SizedBox(height: 20),
 
-            // Register link
+            // Register Link
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -127,7 +153,7 @@ class _LoginState extends State<Login> {
 
             const SizedBox(height: 10),
 
-            // Google + GitHub buttons
+            // Google + GitHub Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
