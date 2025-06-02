@@ -5,6 +5,7 @@ import 'screens/settings.dart';
 import 'screens/home_page/home.dart';
 import 'screens/sign_in_page/login.dart';
 import 'screens/sign_in_page/register.dart';
+import 'screens/profil_page/profil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ class Pomodoro extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
             title: 'Pomodoro App',
             theme: ThemeData(
                 primarySwatch: Colors.blue,
@@ -31,6 +33,7 @@ class Pomodoro extends StatelessWidget {
                 '/register': (context) => RegisterPage(),
                 '/home': (context) => const Home(focusDuration: 25, restDuration: 5),
                 '/settings': (context) => const Settings(),
+                '/profile': (context) => const Profile(),
             },
         );
     }

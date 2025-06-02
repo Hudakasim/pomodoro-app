@@ -85,14 +85,14 @@ class DrawerMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home, color: Color(0xFFC31F48), size: 30),
             title: const Text('T I C K   T A C K', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-            onTap: () => _navigate(context, '/'),
+            onTap: () => _navigate(context, '/home'),
           ),
           ListTile(
             leading: const Icon(Icons.person_3_sharp, color: Color(0xFFC31F48), size: 30),
             title: const Text('P R O F I L', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-            onTap: () => _navigate(context, '/profil'),
+            onTap: () => _navigate(context, '/profile'),
           ),
-          // ... Repeat for other pages (Page3-5) ...
+    
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings_applications_outlined, color: Color(0xFFC31F48), size: 30),

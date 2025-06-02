@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/base.dart';
 import 'rest.dart';
 import 'focus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/local_storage_service.dart';
 
 class Home extends StatefulWidget {
   final int focusDuration;
@@ -20,18 +22,36 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   late final List<Widget> _pages;
-  
+
+  bool _showWelcome = false;
+  String? _userName;
+
   @override
   void initState() {
     super.initState();
     focusTime = widget.focusDuration;
     restTime = widget.restDuration;
-
     _pages = [
       Focus_Study(focusTime: focusTime),
       Rest(restTime: restTime),
     ];
+    _checkWelcome();
   }
+
+  Future<void> _checkWelcome() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? shown = prefs.getBool('welcome_shown');
+    if (shown == null || shown == false) {
+      final storage = LocalStorageService();
+      final userData = await storage.getUserData();
+      setState(() {
+        _showWelcome = true;
+        _userName = userData['name'] ?? 'Kullanıcı';
+      });
+      await prefs.setBool('welcome_shown', true);
+    }
+  }
+
   void _navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;
@@ -44,6 +64,14 @@ class _HomeState extends State<Home> {
       title: 'Tick Tack',
       content: Column(
         children: [
+          if (_showWelcome)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Hoşgeldin, $_userName!',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
           Expanded(
             child: _pages[_selectedIndex],
           ),
