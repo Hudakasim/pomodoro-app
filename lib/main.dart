@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
 import 'screens/settings.dart';
 import 'screens/home_page/home.dart';
@@ -11,6 +12,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Supabase.initialize(
+    url: 'https://nkubvldqzpppwfccjxte.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdWJ2bGRxenBwcHdmY2NqeHRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTY1MDcsImV4cCI6MjA2NDM3MjUwN30.R6YmnPljILWJIldWJWlIEzIzwhXG7KH1GfssrS0lU4c',
   );
   runApp(const Pomodoro());
 }

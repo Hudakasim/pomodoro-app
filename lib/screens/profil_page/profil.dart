@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:image_picker/image_picker.dart';
 import 'package:pomodoro/widgets/base.dart';
 import '../../services/user_service.dart';
 import '../../services/local_storage_service.dart';
 import '../../services/database_helper.dart';
+import '../../services/supabase_service.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -15,10 +16,10 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final User? user = FirebaseAuth.instance.currentUser;
+  final fb_auth.User? user = fb_auth.FirebaseAuth.instance.currentUser;
   final UserService _userService = UserService();
   final LocalStorageService _storage = LocalStorageService();
-
+  final SupabaseService _supabaseService = SupabaseService();
   final TextEditingController _usernameController = TextEditingController();
 
   final TextEditingController _bioController = TextEditingController();
@@ -47,9 +48,9 @@ class _ProfileState extends State<Profile> {
     final localUserData = await _storage.getUserData(userId);
     final sqliteData = await _dbHelper.getUserProfile(userId);
     final firestoreData = await _userService.getUserData();
-
+    final supaData = await _supabaseService.getUserProfile(userId);
     setState(() {
-      if (sqliteData != null) {
+    if (sqliteData != null) {
       _usernameController.text = sqliteData['username'] ?? '';
       _bioController.text = sqliteData['bio'] ?? '';
       final imagePath = sqliteData['profile_image'];
@@ -65,6 +66,13 @@ class _ProfileState extends State<Profile> {
       _cityController.text = firestoreData?['city'] ?? '';
       _isLoading = false;
     });
+
+    if (supaData != null) {
+      _usernameController.text = supaData['username'] ?? '';
+      _bioController.text = supaData['bio'] ?? '';
+      // Profil resmi URL'si varsa burada kullanılabilir (ileride ekleyeceğiz)
+    }
+
   }
 
   Future<void> _pickImage() async {
@@ -121,8 +129,14 @@ class _ProfileState extends State<Profile> {
       } catch (e) {
         print("SharedPreferences güncelleme hatası: $e");
       }
+    await _supabaseService.upsertUserProfile(
+      userId: userId,
+      username: _usernameController.text.trim(),
+      bio: _bioController.text.trim(),
+      profileImageUrl: '', // ileride Storage'tan URL eklersin
+    );
 
-      if (!mounted) return;
+    if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profil başarıyla güncellendi!')),
       );
