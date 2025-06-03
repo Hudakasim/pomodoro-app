@@ -45,21 +45,26 @@ Verimli çalışma için Pomodoro tekniğini kullanarak, kullanıcıların odakl
 ### 2. Kayıt Sayfası (`register.dart`)
 
 - E-posta, şifre ve kullanıcı adı ile yeni hesap oluşturma.
+-  ![kayıt Sayfası](assets/images/register.png)
 
 ### 3. Profil Sayfası (`profil.dart`)
 
 - Kullanıcı bilgilerini görüntüleme ve düzenleme.
 - Profil fotoğrafı seçip Supabase Storage’a yükleyebilme.
 - Profil bilgilerini Firebase, Supabase ve SQLite ile senkronize etme.
+-  ![profil Sayfası](assets/images/profil.png)
 
 ### 4. Ana Sayfa (`home.dart`)
 
 - Pomodoro zamanlayıcısı başlatma ve durdurma.
 - Odaklanma ve dinlenme sürelerini gösterme.
+- ![focus Sayfası](assets/images/focus.png)
+- ![rest Sayfası](assets/images/rest.png)
 
 ### 5. Ayarlar Sayfası (`settings.dart`)
 
 - Pomodoro zamanlayıcısı ayarları değiştirme.
+- ![Ayarlar Sayfası](assets/images/settings.png)
 
 ## Login Bilgilerinin Saklanması
 
