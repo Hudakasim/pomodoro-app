@@ -1,65 +1,86 @@
-# Pomodoro Timer App
+# Pomodoro Uygulaması
 
-## Proje Hakkında
+Pomodoro, kullanıcıların odaklanma ve dinlenme sürelerini yönetmelerine yardımcı olan, Flutter ile geliştirilmiş modern bir zaman yönetimi uygulamasıdır. Ayrıca profil yönetimi ve kullanıcı bilgilerini düzenleme özellikleri sunar.
 
-Pomodoro Tekniği, zaman yönetimini iyileştirmeye yönelik bir yöntemdir. Bu uygulama, kullanıcıların **odaklanma sürelerini** ve **dinlenme sürelerini** düzenleyerek bu tekniği daha verimli bir şekilde kullanmalarına olanak tanır. Uygulama, kullanıcı dostu bir arayüz ve etkileşimli özelliklerle geliştirilmiştir.
+## Projenin Amacı
 
-## Proje Amacı
+Verimli çalışma için Pomodoro tekniğini kullanarak, kullanıcıların odaklanma ve mola sürelerini kolayca planlamalarını sağlamak. Aynı zamanda kullanıcıların profillerini güncelleyebilecekleri güvenli ve pratik bir arayüz sunmak.
 
-Bu projenin amacı, kullanıcıların **Pomodoro Tekniği** ile odaklanma sürelerini optimize etmelerine yardımcı olmak, ayrıca dinlenme sürelerini verimli bir şekilde yönetmelerine olanak tanımaktır. Uygulama, **odaklanma** ve **dinlenme sürelerini** kişiselleştirerek kullanıcının verimliliğini artırmayı hedefler.
+## Teknik Detaylar
 
----
+- **Flutter:** Platformlar arası mobil uygulama geliştirme.
+- **Firebase:** Kullanıcı kimlik doğrulama ve temel kullanıcı verileri için.
+- **Supabase:** Profil bilgileri ve profil resmi yönetimi için.
+- **SQLite:** Cihaz içi veriler için hızlı ve offline depolama.
+- **Provider:** Durum yönetimi.
+- **Image Picker:** Kullanıcıların profil fotoğrafı seçimi için.
 
-##  Projedeki Sayfaların Görevleri ve İçerikleri
+## Öne Çıkan Özellikler
 
-### 1. **Home Page**
-- **Görev**: Kullanıcıların geri sayım başlatıp durdurabileceği, **Focus Time** ve **Rest Time**'ı takip edebileceği ana sayfa.
-- **İçerik**:
-  - **Geri sayım ekranı**: Kullanıcıların **Focus Time** veya **Rest Time**'ı takip edebileceği bir geri sayım sayacı.
-  - **Start/Stop Timer** butonları: Timer'ı başlatmak veya durdurmak için butonlar.
-  - **Settings butonu**: Kullanıcıları **Settings Page**'e yönlendiren buton.
+- **Kullanıcı Girişi:** Firebase Authentication ile güvenli giriş.
+- **Profil Yönetimi:** Supabase Storage kullanarak profil resmi yükleme ve güncelleme.
+- **Pomodoro Zamanlayıcısı:** 25 dakika odaklanma ve 5 dakika mola süreleriyle zaman yönetimi.
+- **Profil Bilgileri Güncelleme:** İsim, soyisim, biyografi, doğum tarihi ve şehir gibi bilgileri düzenleyebilme.
+- **Veri Senkronizasyonu:** Firestore, Supabase ve SQLite ile verilerin senkronize edilmesi.
+- **Tema Yönetimi:** Karanlık ve açık mod seçenekleri.
+- **Google ve GitHub OAuth:** Alternatif hızlı giriş yöntemleri.
 
-### 2. **Settings Page**
-- **Görev**: Kullanıcıların **Focus Time** ve **Rest Time** değerlerini değiştirmelerine olanak tanır.
-- **İçerik**:
-  - **Focus Time**: Kullanıcıların odaklanmak istedikleri süreyi girmeleri için bir giriş alanı.
-  - **Rest Time**: Kullanıcıların dinlenmek istedikleri süreyi girmeleri için bir giriş alanı.
-  - **Save Settings** butonu: Kullanıcı ayarlarını kaydeder ve **Home Page**'e geri gönderir.
+## Kullanılan Teknolojiler
 
-### 3. **Drawer Menü**
-- **Görev**: Kullanıcıların uygulama içinde gezinmesini kolaylaştıran yan menü.
-- **İçerik**:
-  - **Home**: Ana sayfaya gitmek için bir seçenek.
-  - **Settings**: Ayarlar sayfasına gitmek için bir seçenek.
-  - **Log out**: Kullanıcıyı çıkış yapmaya yönlendiren bir seçenek.
+- Flutter  
+- Firebase (Authentication, Firestore)  
+- Supabase (Storage ve Veritabanı)  
+- SQLite (Yerel veri)  
+- Provider (State Management)    
 
----
+## Uygulama Sayfalarının Görevleri ve İçerikleri
 
-##  Drawer Menüde Kullandığınız Logoya Ait API Bilgileri
+### 1. Giriş Sayfası (`login.dart`)
 
-Uygulama, **Cloudinary**'den alınan bir logo görselini kullanmaktadır. Bu logo görseli, kullanıcıya uygulamanın marka kimliğini göstermek amacıyla **Drawer** menüsünde gösterilmektedir.
+- E-posta ve şifre ile giriş yapma.
+- Google ve GitHub OAuth ile alternatif giriş.
+- Kayıt olma ve şifre sıfırlama seçenekleri.
+- ![Giriş Sayfası](assets/images/login.png)
 
-- **Logo URL**: [Logo Görseli](https://res.cloudinary.com/dcho616lp/image/upload/v1744061032/logo-MinkTick.png)
+### 2. Kayıt Sayfası (`register.dart`)
 
----
+- E-posta, şifre ve kullanıcı adı ile yeni hesap oluşturma.
+-  ![kayıt Sayfası](assets/images/register.png)
 
-##  Login Bilgilerini Nasıl Sakladığınız
+### 3. Profil Sayfası (`profil.dart`)
 
-Bu projede, login bilgilerini saklamak için **`SharedPreferences`** yöntemini kullanılmamıştır.
+- Kullanıcı bilgilerini görüntüleme ve düzenleme.
+- Profil fotoğrafı seçip Supabase Storage’a yükleyebilme.
+- Profil bilgilerini Firebase, Supabase ve SQLite ile senkronize etme.
+-  ![profil Sayfası](assets/images/profil.png)
 
----
+### 4. Ana Sayfa (`home.dart`)
 
-##  Grup Üyelerinin Projeye Katkısı
+- Pomodoro zamanlayıcısı başlatma ve durdurma.
+- Odaklanma ve dinlenme sürelerini gösterme.
+- ![focus Sayfası](assets/images/focus.png)
+- ![rest Sayfası](assets/images/rest.png)
 
-- **Huda**: Proje fikri, **UI tasarımı**, ve **Tum Proje Sayfalari**'in geliştirilmesi.
+### 5. Ayarlar Sayfası (`settings.dart`)
 
-### **Teknik Detaylar**:
-- **Dart ve Flutter** kullanılarak geliştirilmiştir.
-- **Global Değişkenler**: Kullanıcı adı gibi veriler, global değişkenler ile saklanır ve sayfalar arasında paylaşılır.
-- **State Management**: Basit state management yaklaşımıyla sayfalar arasında veri paylaşımı sağlanır. Kullanıcı adı ve ayar bilgileri global değişkenlerde saklanır.
-- **Timer İşlevi**: Hem Focus hem de Rest sayfalarında geri sayım işlevi bulunmaktadır. Bu sayede kullanıcılar odaklanma ve dinlenme sürelerini kontrol edebilir.
-- **Drawer Menü**: Uygulama genelinde navigasyonu sağlamak için bir **Drawer** menüsü kullanılır.
+- Pomodoro zamanlayıcısı ayarları değiştirme.
+- ![Ayarlar Sayfası](assets/images/settings.png)
 
-### **Öne Çıkan Özellikler**:
-- **Basit Arayüz**: Kullanıcılar, odaklanma ve dinlenme sürelerini kişiselleştirebilecekleri kullanım dostu bir arayüze sahip.
-- **Kullanıcı Girişi ve Saklama**: Kullanıcı adı **global değişkenler** kullanılarak saklanır ve uygulamanın her yerinde kullanılabilir.
+## Login Bilgilerinin Saklanması
+
+- **Firebase E-posta:** hudaahmad0708@gmail.com  
+- **Firebase Şifre:** 123456 
+
+Kullanıcı giriş bilgileri Firebase Authentication kullanılarak güvenli bir şekilde saklanmaktadır:
+
+- Kullanıcı, e-posta ve şifre ile giriş yaptığında bilgiler Firebase Authentication'a gönderilir.
+- Firebase, kullanıcı bilgilerini kendi güvenli veritabanında saklar.
+- Başarılı giriş sonrası, oturum belirteci (token) uygulamada saklanır ve API isteklerinde kullanılır.
+- Hassas bilgiler (şifre vb.) cihazda saklanmaz, tüm kimlik doğrulama Firebase tarafından yönetilir.
+
+
+## Grup Üyelerinin Projeye Katkısı
+**Huda Kasımoğlu**
+- Projedeki her şeyden sorumlu.
+
+  
